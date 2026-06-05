@@ -14,7 +14,6 @@
     updates: 'essentialSupport.updates'
   };
 
-  var observerTimer = null;
   var isApplyingSidebarOrder = false;
   var draggedAppId = null;
 
@@ -335,20 +334,17 @@
     document.head.appendChild(style);
   }
 
-  function scheduleEnhance() {
-    clearTimeout(observerTimer);
-    observerTimer = setTimeout(function () {
-      applySidebarOrder();
-      enhanceUpdatesGrid();
-    }, 25);
+  function enhanceRenderedUi() {
+    applySidebarOrder();
+    enhanceUpdatesGrid();
   }
 
   function init() {
     injectStyles();
     ensureUpdateDetailModal();
-    scheduleEnhance();
+    enhanceRenderedUi();
 
-    var observer = new MutationObserver(scheduleEnhance);
+    var observer = new MutationObserver(enhanceRenderedUi);
     observer.observe(document.body, { childList: true, subtree: true });
 
     document.addEventListener('keydown', function (event) {
