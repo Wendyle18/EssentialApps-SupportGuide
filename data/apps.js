@@ -172,3 +172,26 @@ window.ESSENTIAL_APPS = [
   }
   // TODO: Add more apps here as they are onboarded to support
 ];
+
+window.ESSENTIAL_APPS.sort(function (a, b) {
+  return a.name.localeCompare(b.name);
+});
+
+(function loadUiEnhancements() {
+  function appendEnhancementsScript() {
+    if (document.querySelector('script[src="enhancements.js"]')) return;
+
+    var script = document.createElement('script');
+    script.src = 'enhancements.js';
+    script.defer = true;
+    document.body.appendChild(script);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () {
+      setTimeout(appendEnhancementsScript, 0);
+    });
+  } else {
+    setTimeout(appendEnhancementsScript, 0);
+  }
+})();
