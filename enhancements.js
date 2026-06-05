@@ -160,11 +160,11 @@
     var controls = document.createElement('span');
     controls.className = 'app-item-controls';
     controls.innerHTML =
-      '<button type="button" class="app-order-btn" data-move="up" title="Move up" aria-label="Move up">up</button>' +
-      '<button type="button" class="app-order-btn" data-move="down" title="Move down" aria-label="Move down">down</button>';
+      '<button type="button" class="app-order-btn" data-move="up" title="Move up" aria-label="Move up">^</button>' +
+      '<button type="button" class="app-order-btn" data-move="down" title="Move down" aria-label="Move down">v</button>';
 
     if (isCustomApp(appId)) {
-      controls.innerHTML += '<button type="button" class="app-delete-btn" title="Delete app" aria-label="Delete app">delete</button>';
+      controls.innerHTML += '<button type="button" class="app-delete-btn" title="Delete app" aria-label="Delete app">x</button>';
     }
 
     item.appendChild(controls);
@@ -218,10 +218,13 @@
     if (!list || isApplyingSidebarOrder) return;
 
     isApplyingSidebarOrder = true;
-    var items = qsa('.app-item', list);
-    getSortedItems(items).forEach(function (item) {
-      list.appendChild(item);
-      decorateAppItem(item);
+    var sortedItems = getSortedItems(qsa('.app-item', list));
+    sortedItems.forEach(decorateAppItem);
+
+    sortedItems.forEach(function (item, index) {
+      if (list.children[index] !== item) {
+        list.insertBefore(item, list.children[index] || null);
+      }
     });
     isApplyingSidebarOrder = false;
   }
@@ -313,7 +316,7 @@
       '.app-item-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }',
       '.app-item-controls { display: inline-flex; gap: 3px; opacity: 0; transition: opacity var(--ease); }',
       '.app-item:hover .app-item-controls, .app-item:focus-within .app-item-controls { opacity: 1; }',
-      '.app-order-btn, .app-delete-btn { border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); color: var(--text-muted); cursor: pointer; font-size: 10px; line-height: 1; padding: 4px 5px; }',
+      '.app-order-btn, .app-delete-btn { width: 22px; height: 22px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); color: var(--text-muted); cursor: pointer; font-size: 11px; line-height: 1; padding: 0; }',
       '.app-order-btn:hover, .app-delete-btn:hover { background: var(--accent-soft); color: var(--text); border-color: rgba(199, 253, 79, 0.55); }',
       '.app-delete-btn:hover { background: #fdf0f0; border-color: #e8b4b4; color: #9a3d3d; }',
       '.app-item.dragging { opacity: 0.48; }',
